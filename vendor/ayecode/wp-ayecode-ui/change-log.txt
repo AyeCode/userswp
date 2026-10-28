@@ -1,3 +1,10 @@
+= 0.2.58 - 2026-10-20 =
+* FSE editor input fields slow to respond while typing - FIXED
+
+= 0.2.57 - 2026-10-15 =
+* Sanitize embed/lightbox iframe URLs to block unsafe urls - FIXED/SECURITY
+* Enhanced data sanitization and output escaping - CHANGED/SECURITY
+
 = 0.2.56 - 2026-09-30 =
 * Guard the colour constants against a second copy - CHANGED
 

@@ -50,7 +50,7 @@ class AUI_Component_Button {
 			// open/type
 			if($type=='a'){
 				$new_window = !empty($args['new_window']) ? ' target="_blank" ' : '';
-				$output .= '<a href="' . $args['href'] . '"'.$new_window;
+				$output .= '<a href="' . esc_attr( $args['href'] ) . '"'.$new_window;
 			}elseif($type=='badge'){
 				$output .= '<span ';
 			}else{

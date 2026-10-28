@@ -293,6 +293,10 @@
     }
 
     function aui_modal_iframe($title,$url,$footer,$dismissible,$class,$dialog_class,$body_class,responsive){
+		$url = aui_sanitize_url($url);
+		if (!$url) {
+			return;
+		}
         if(!$body_class){$body_class = 'p-0';}
         var wClass = 'text-center position-absolute w-100 text-dark overlay overlay-white p-0 m-0 d-flex justify-content-center align-items-center';
         var wStyle = '';
@@ -330,7 +334,7 @@
             });
 
             //resize the iframe once loaded.
-            iFrame.load(function() {
+            iFrame.on('load', function() {
                 jQuery('.ac-preview-loading').removeClass('d-flex').addClass('d-none');
             });
         });
@@ -732,9 +736,9 @@
                 $carousel += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto ratio ratio-16x9" style="max-height:'+css_height+styleWidth+'">';
 
                 // iframe
-                var url = jQuery(a).attr('href');
+                var url = aui_sanitize_url(jQuery(a).attr('href'),{fallback:'about:blank'});
                 var iframe = '<div class="ac-preview-loading text-light d-none" style="left:0;top:0;height:'+css_height +'"><div class="spinner-border m-auto" role="status"></div></div>';
-                iframe += '<iframe class="aui-carousel-iframe" style="height:'+css_height +'" src="" data-src="'+url+'?rel=0&amp;showinfo=0&amp;modestbranding=1&amp;autoplay=1" allow="autoplay"></iframe>';
+                iframe += url ? jQuery('<iframe class="aui-carousel-iframe" src="" allow="autoplay"></iframe>').attr('style', 'height:' + css_height).attr('data-src', url + '?rel=0&showinfo=0&modestbranding=1&autoplay=1').get(0).outerHTML : '';
                 var img = iframe ;//.css('height',css_height).get(0).outerHTML;
                 $carousel  += img;
 
@@ -788,7 +792,7 @@
      */
     function aui_init_modal_iframe() {
         jQuery('.aui-has-embed, [data-aui-embed="iframe"]').each(function(e){
-            if (!jQuery(this).hasClass('aui-modal-iframed') && jQuery(this).data('embed-url')) {
+            if (!jQuery(this).hasClass('aui-modal-iframed') && jQuery(this).data('embed-url') && aui_sanitize_url(jQuery(this).data('embed-url'))) {
                 jQuery(this).addClass('aui-modal-iframed');
 
                 jQuery(this).on("click",function(e1) {
@@ -1120,17 +1124,35 @@
 
     // fire when URL changes also.
     let FSElastUrl = location.href;
-    new MutationObserver(() => {
+
+    /**
+     * Re-bind the scroll handler when the editor navigates to another template or page.
+     *
+     * This used to run from a MutationObserver watching the whole document, so it was
+     * called for every DOM change the editor made, typing included, just to compare a
+     * URL. Watching the URL itself does the same job for a fraction of the cost.
+     */
+    function aui_fse_check_url_change(){
         const url = location.href;
-        if (url !== FSElastUrl) {
-            FSElastUrl = url;
-            aui_fse_set_data_scroll();
-            // fire a second time incase of load delays.
-            setTimeout(function(){
-                aui_fse_set_data_scroll();
-            }, 2000);
+
+        if ( url === FSElastUrl ) {
+            return;
         }
-    }).observe(document, {subtree: true, childList: true});
+
+        FSElastUrl = url;
+        aui_fse_set_data_scroll();
+
+        // fire a second time incase of load delays.
+        setTimeout(function(){
+            aui_fse_set_data_scroll();
+        }, 2000);
+    }
+
+    window.addEventListener('popstate', aui_fse_check_url_change);
+    window.addEventListener('hashchange', aui_fse_check_url_change);
+
+    // The editor navigates with history.pushState(), which fires no event, so poll too.
+    setInterval(aui_fse_check_url_change, 500);
 
 
     /**
@@ -1144,124 +1166,244 @@
         return result ? parseInt(result[1], 16) +','+parseInt(result[2], 16)+','+parseInt(result[3], 16) : null;
     }
 
+    // The site colors we keep in sync with the global style palette.
+    const aui_fse_sync_colors = ['primary', 'danger', 'warning', 'info'];
+
+    // Last seen value for each synced color, so we only write when it actually changes.
+    let aui_fse_color_cache = {};
+
+    // True once the palette already on screen has been recorded.
+    let aui_fse_colors_primed = false;
+
     /**
-     * update colors as the style colour pallet is changed
-     * @param $color
+     * Read the `styles` entry of the editor settings.
+     *
+     * This is a plain store read with no DOM or layout access, so it is cheap enough to run
+     * on every wp.data change. The array identity only changes when the global styles are
+     * regenerated, which is what we use as our "something actually changed" signal.
+     *
+     * @returns {Array|null}
      */
-    function aui_fse_sync_site_colors($color){
+    function aui_fse_get_styles_setting(){
+        const store = wp.data && wp.data.select ? wp.data.select('core/block-editor') : null;
 
-        const getColorHex = () => {
-            const element = jQuery(".edit-site-visual-editor__editor-canvas").contents().find(".editor-styles-wrapper").get(0);
-            const style = element == null ? '' : window.getComputedStyle(element).getPropertyValue('--wp--preset--color--'+$color);
-            return style;
-        };
+        if ( ! store || typeof store.getSettings !== 'function' ) {
+            return null;
+        }
 
-        // set the initial ColorHex
-        let colorHex = getColorHex();
+        const settings = store.getSettings();
 
+        return settings && settings.styles ? settings.styles : null;
+    }
 
-        wp.data.subscribe(() => {
-
-            // get the current ColorHex
-            const newColorHex = getColorHex();
-
-            // only do something if ColorHex has changed.
-            if( newColorHex && colorHex !== newColorHex ) {
-                jQuery(".edit-site-visual-editor__editor-canvas").contents().find("html body").get(0).style.setProperty('--bs-'+$color+'-rgb',aui_fse_hexToRgb(newColorHex));
-            }
-
-            // update the newColorHex variable.
-            colorHex = newColorHex;
-
-        });
+    /**
+     * Get the global styles CSS string out of a `styles` setting array.
+     *
+     * @param styles
+     * @returns {string|null}
+     */
+    function aui_fse_get_global_styles_css( styles ){
+        return styles && styles[3] && typeof styles[3].css === 'string' ? styles[3].css : null;
     }
 
     /**
      * update colors as the style colour pallet is changed
-     * @param $color
+     *
+     * @param prime When true, only record the current values instead of writing them.
+     * @returns {boolean} False when the editor canvas is not available yet.
      */
-    function aui_fse_sync_site_typography(){
-        const getGlobalStyles = () => {
-            const { select } = wp.data;
-            const settings = select('core/block-editor').getSettings();
+    function aui_fse_sync_site_colors( prime ){
+        const canvas = jQuery(".edit-site-visual-editor__editor-canvas").contents();
+        const element = canvas.find(".editor-styles-wrapper").get(0);
 
-            return ( settings && settings.styles && settings.styles[3].css ? settings.styles[3].css : null );
-        };
+        if ( element == null ) {
+            return false;
+        }
 
-        // set the initial styles
-        let Styles = getGlobalStyles();
+        // Resolve the styles once and read every color from the same snapshot.
+        const computed = window.getComputedStyle(element);
+        let body = null;
 
-        wp.data.subscribe(() => {
-            // get the current styles
-            const newStyles = getGlobalStyles();
+        aui_fse_sync_colors.forEach(function($color){
+            const newColorHex = computed.getPropertyValue('--wp--preset--color--'+$color);
 
-            // only do something if newStyles has changed.
-            if( newStyles && Styles !== newStyles ) {
-                // heading sizes
-                aui_updateCssRule('body.editor-styles-wrapper h1', 'font-size', aui_parseCSS(newStyles, 'h1', 'font-size'));
-                aui_updateCssRule('body.editor-styles-wrapper h2', 'font-size', aui_parseCSS(newStyles, 'h2', 'font-size'));
-                aui_updateCssRule('body.editor-styles-wrapper h3', 'font-size', aui_parseCSS(newStyles, 'h3', 'font-size'));
-                aui_updateCssRule('body.editor-styles-wrapper h4', 'font-size', aui_parseCSS(newStyles, 'h4', 'font-size'));
-                aui_updateCssRule('body.editor-styles-wrapper h5', 'font-size', aui_parseCSS(newStyles, 'h5', 'font-size'));
-                aui_updateCssRule('body.editor-styles-wrapper h6', 'font-size', aui_parseCSS(newStyles, 'h6', 'font-size'));
-
-                // ALl Headings
-               aui_updateCssRule('body.editor-styles-wrapper h1, body.editor-styles-wrapper h2, body.editor-styles-wrapper h3, body.editor-styles-wrapper h4, body.editor-styles-wrapper h5, body.editor-styles-wrapper h6', 'font-family', aui_parseCSS(newStyles, 'h1, h2, h3, h4, h5, h6', 'font-family'));
-
-                // individual headings
-                aui_updateCssRule('body.editor-styles-wrapper h1', 'font-family', aui_parseCSS(newStyles, 'h1{', 'font-family'));
-                aui_updateCssRule('body.editor-styles-wrapper h2', 'font-family', aui_parseCSS(newStyles, 'h2{', 'font-family'));
-                aui_updateCssRule('body.editor-styles-wrapper h3', 'font-family', aui_parseCSS(newStyles, 'h3{', 'font-family'));
-                aui_updateCssRule('body.editor-styles-wrapper h4', 'font-family', aui_parseCSS(newStyles, 'h4{', 'font-family'));
-                aui_updateCssRule('body.editor-styles-wrapper h5', 'font-family', aui_parseCSS(newStyles, 'h5{', 'font-family'));
-                aui_updateCssRule('body.editor-styles-wrapper h6', 'font-family', aui_parseCSS(newStyles, 'h6{', 'font-family'));
-
-                // console.log(aui_parseCSS(newStyles, 'h2{', 'font-family'));
-
-                // color
-                aui_updateCssRule('body.editor-styles-wrapper h1, body.editor-styles-wrapper h2, body.editor-styles-wrapper h3, body.editor-styles-wrapper h4, body.editor-styles-wrapper h5, body.editor-styles-wrapper h6', 'color', aui_parseCSS(newStyles, 'h1, h2, h3, h4, h5, h6', 'color'));
-
-                aui_updateCssRule('body.editor-styles-wrapper h1', 'color', aui_parseCSS(newStyles, 'h1{', 'color'));
-                aui_updateCssRule('body.editor-styles-wrapper h2', 'color', aui_parseCSS(newStyles, 'h2{', 'color'));
-                aui_updateCssRule('body.editor-styles-wrapper h3', 'color', aui_parseCSS(newStyles, 'h3{', 'color'));
-                aui_updateCssRule('body.editor-styles-wrapper h4', 'color', aui_parseCSS(newStyles, 'h4{', 'color'));
-                aui_updateCssRule('body.editor-styles-wrapper h5', 'color', aui_parseCSS(newStyles, 'h5{', 'color'));
-                aui_updateCssRule('body.editor-styles-wrapper h6', 'color', aui_parseCSS(newStyles, 'h6{', 'color'));
-
-
-
-                //background
-                aui_updateCssRule('body.editor-styles-wrapper h1, body.editor-styles-wrapper h2, body.editor-styles-wrapper h3, body.editor-styles-wrapper h4, body.editor-styles-wrapper h5, body.editor-styles-wrapper h6', 'background', aui_parseCSS(newStyles, 'h1, h2, h3, h4, h5, h6', 'background'));
-
-                aui_updateCssRule('body.editor-styles-wrapper h1', 'background', aui_parseCSS(newStyles, 'h1{', 'background'));
-                aui_updateCssRule('body.editor-styles-wrapper h2', 'background', aui_parseCSS(newStyles, 'h2{', 'background'));
-                aui_updateCssRule('body.editor-styles-wrapper h3', 'background', aui_parseCSS(newStyles, 'h3{', 'background'));
-                aui_updateCssRule('body.editor-styles-wrapper h4', 'background', aui_parseCSS(newStyles, 'h4{', 'background'));
-                aui_updateCssRule('body.editor-styles-wrapper h5', 'background', aui_parseCSS(newStyles, 'h5{', 'background'));
-                aui_updateCssRule('body.editor-styles-wrapper h6', 'background', aui_parseCSS(newStyles, 'h6{', 'background'));
-
-
-
-                //                console.log('Font size of h2 is:', fontSize);
+            // only do something if ColorHex has changed.
+            if( ! newColorHex || aui_fse_color_cache[$color] === newColorHex ) {
+                return;
             }
 
-            // update the newStyles variable.
-            Styles = newStyles;
+            // While priming we only record what is already there, as the previous code did.
+            if ( prime ) {
+                aui_fse_color_cache[$color] = newColorHex;
 
+                return;
+            }
 
+            if ( body === null ) {
+                body = canvas.find("html body").get(0) || false;
+            }
+
+            if ( body ) {
+                body.style.setProperty('--bs-'+$color+'-rgb',aui_fse_hexToRgb(newColorHex));
+
+                // update the cached value.
+                aui_fse_color_cache[$color] = newColorHex;
+            }
         });
+
+        return true;
+    }
+
+    /**
+     * Record the palette that is already on screen, so the first change we see is also the
+     * first thing we write.
+     *
+     * The canvas iframe may not have rendered yet, so keep looking for a short while.
+     *
+     * @param attempts Remaining attempts.
+     */
+    function aui_fse_prime_site_colors( attempts ){
+        if ( aui_fse_colors_primed ) {
+            return;
+        }
+
+        if ( aui_fse_sync_site_colors( true ) ) {
+            aui_fse_colors_primed = true;
+
+            return;
+        }
+
+        if ( attempts > 0 ) {
+            setTimeout(function(){
+                aui_fse_prime_site_colors( attempts - 1 );
+            }, 1000);
+        }
+    }
+
+    /**
+     * update typography as the global styles are changed
+     *
+     * @param newStyles The global styles CSS string.
+     */
+    function aui_fse_sync_site_typography( newStyles ){
+        // Nothing to parse, so there is nothing to repaint.
+        if ( ! newStyles ) {
+            return;
+        }
+
+        // heading sizes
+        aui_updateCssRule('body.editor-styles-wrapper h1', 'font-size', aui_parseCSS(newStyles, 'h1', 'font-size'));
+        aui_updateCssRule('body.editor-styles-wrapper h2', 'font-size', aui_parseCSS(newStyles, 'h2', 'font-size'));
+        aui_updateCssRule('body.editor-styles-wrapper h3', 'font-size', aui_parseCSS(newStyles, 'h3', 'font-size'));
+        aui_updateCssRule('body.editor-styles-wrapper h4', 'font-size', aui_parseCSS(newStyles, 'h4', 'font-size'));
+        aui_updateCssRule('body.editor-styles-wrapper h5', 'font-size', aui_parseCSS(newStyles, 'h5', 'font-size'));
+        aui_updateCssRule('body.editor-styles-wrapper h6', 'font-size', aui_parseCSS(newStyles, 'h6', 'font-size'));
+
+        // ALl Headings
+       aui_updateCssRule('body.editor-styles-wrapper h1, body.editor-styles-wrapper h2, body.editor-styles-wrapper h3, body.editor-styles-wrapper h4, body.editor-styles-wrapper h5, body.editor-styles-wrapper h6', 'font-family', aui_parseCSS(newStyles, 'h1, h2, h3, h4, h5, h6', 'font-family'));
+
+        // individual headings
+        aui_updateCssRule('body.editor-styles-wrapper h1', 'font-family', aui_parseCSS(newStyles, 'h1{', 'font-family'));
+        aui_updateCssRule('body.editor-styles-wrapper h2', 'font-family', aui_parseCSS(newStyles, 'h2{', 'font-family'));
+        aui_updateCssRule('body.editor-styles-wrapper h3', 'font-family', aui_parseCSS(newStyles, 'h3{', 'font-family'));
+        aui_updateCssRule('body.editor-styles-wrapper h4', 'font-family', aui_parseCSS(newStyles, 'h4{', 'font-family'));
+        aui_updateCssRule('body.editor-styles-wrapper h5', 'font-family', aui_parseCSS(newStyles, 'h5{', 'font-family'));
+        aui_updateCssRule('body.editor-styles-wrapper h6', 'font-family', aui_parseCSS(newStyles, 'h6{', 'font-family'));
+
+        // console.log(aui_parseCSS(newStyles, 'h2{', 'font-family'));
+
+        // color
+        aui_updateCssRule('body.editor-styles-wrapper h1, body.editor-styles-wrapper h2, body.editor-styles-wrapper h3, body.editor-styles-wrapper h4, body.editor-styles-wrapper h5, body.editor-styles-wrapper h6', 'color', aui_parseCSS(newStyles, 'h1, h2, h3, h4, h5, h6', 'color'));
+
+        aui_updateCssRule('body.editor-styles-wrapper h1', 'color', aui_parseCSS(newStyles, 'h1{', 'color'));
+        aui_updateCssRule('body.editor-styles-wrapper h2', 'color', aui_parseCSS(newStyles, 'h2{', 'color'));
+        aui_updateCssRule('body.editor-styles-wrapper h3', 'color', aui_parseCSS(newStyles, 'h3{', 'color'));
+        aui_updateCssRule('body.editor-styles-wrapper h4', 'color', aui_parseCSS(newStyles, 'h4{', 'color'));
+        aui_updateCssRule('body.editor-styles-wrapper h5', 'color', aui_parseCSS(newStyles, 'h5{', 'color'));
+        aui_updateCssRule('body.editor-styles-wrapper h6', 'color', aui_parseCSS(newStyles, 'h6{', 'color'));
+
+
+
+        //background
+        aui_updateCssRule('body.editor-styles-wrapper h1, body.editor-styles-wrapper h2, body.editor-styles-wrapper h3, body.editor-styles-wrapper h4, body.editor-styles-wrapper h5, body.editor-styles-wrapper h6', 'background', aui_parseCSS(newStyles, 'h1, h2, h3, h4, h5, h6', 'background'));
+
+        aui_updateCssRule('body.editor-styles-wrapper h1', 'background', aui_parseCSS(newStyles, 'h1{', 'background'));
+        aui_updateCssRule('body.editor-styles-wrapper h2', 'background', aui_parseCSS(newStyles, 'h2{', 'background'));
+        aui_updateCssRule('body.editor-styles-wrapper h3', 'background', aui_parseCSS(newStyles, 'h3{', 'background'));
+        aui_updateCssRule('body.editor-styles-wrapper h4', 'background', aui_parseCSS(newStyles, 'h4{', 'background'));
+        aui_updateCssRule('body.editor-styles-wrapper h5', 'background', aui_parseCSS(newStyles, 'h5{', 'background'));
+        aui_updateCssRule('body.editor-styles-wrapper h6', 'background', aui_parseCSS(newStyles, 'h6{', 'background'));
+
+
+
+        //                console.log('Font size of h2 is:', fontSize);
     }
 
     setTimeout(function(){
         aui_sync_admin_styles();
     }, 10000);
 
+    // Guard so we only ever register one subscriber, even if this is called again.
+    let aui_fse_synced = false;
+
     function aui_sync_admin_styles(){
-        aui_fse_sync_site_colors('primary');
-        aui_fse_sync_site_colors('danger');
-        aui_fse_sync_site_colors('warning');
-        aui_fse_sync_site_colors('info');
-        aui_fse_sync_site_typography();
+        if ( aui_fse_synced || ! wp.data || typeof wp.data.subscribe !== 'function' ) {
+            return;
+        }
+
+        aui_fse_synced = true;
+
+        // The `styles` array identity is our change signal, the CSS string tells us whether
+        // the typography rules need rewriting.
+        let aui_fse_last_styles = aui_fse_get_styles_setting();
+        let aui_fse_last_css = aui_fse_get_global_styles_css( aui_fse_last_styles );
+        let aui_fse_timer = null;
+
+        // CSS waiting to be applied, carried across debounced ticks so a change is never lost.
+        let aui_fse_pending_css = null;
+
+        aui_fse_prime_site_colors( 10 );
+
+        // A single subscriber for everything, gated on a cheap store read.
+        wp.data.subscribe(function(){
+            const styles = aui_fse_get_styles_setting();
+
+            // Nothing style related changed, so this is a keystroke, a selection, a save, etc.
+            // Bail out before going anywhere near the DOM.
+            if ( styles === aui_fse_last_styles ) {
+                return;
+            }
+
+            aui_fse_last_styles = styles;
+
+            const css = aui_fse_get_global_styles_css( styles );
+
+            if ( css && css !== aui_fse_last_css ) {
+                aui_fse_last_css = css;
+                aui_fse_pending_css = css;
+            }
+
+            // A single global style edit fires a burst of store updates, we only need the last.
+            if ( aui_fse_timer ) {
+                clearTimeout( aui_fse_timer );
+            }
+
+            aui_fse_timer = setTimeout(function(){
+                aui_fse_timer = null;
+
+                const css_to_apply = aui_fse_pending_css;
+                aui_fse_pending_css = null;
+
+                aui_fse_sync_site_colors();
+                aui_fse_sync_site_typography( css_to_apply );
+
+                // The iframe can apply the new stylesheet a beat after the store updates, so
+                // check the palette again once it has settled.
+                setTimeout(function(){
+                    aui_fse_sync_site_colors();
+                }, 500);
+            }, 150);
+        });
     }
 
     // setTimeout(function(){
@@ -1348,8 +1490,162 @@
         styleSheet.insertRule(`${selector} { ${property}: ${value}; }`, rules.length);
         // console.log(`insert rule ${selector}`);
     }
+<?php } ?>
+/**
+ * Sanitizes and validates a URL for safe use in an HTML attribute or a DOM property.
+ *
+ * @param {string} url - The URL to sanitize.
+ * @param {Object} [options] - Configuration options.
+ * @param {boolean} [options.allowRelative=false] - Allow same-origin relative URLs.
+ * @param {string} [options.baseOrigin=''] - Base URL for relative URLs when there is no window (SSR).
+ * @param {string[]|null} [options.allowedDomains=null] - Exact hostnames to allow (e.g. 'www.youtube.com').
+ *        null = no allowlist, [] = block all. A non-array, or any entry that is not a valid
+ *        hostname string, blocks all URLs.
+ * @returns {string} The sanitized URL, or fallback.
+ */
+function aui_sanitize_url(url, options) {
+    const FALLBACK_URL = ''; // '' OR 'about:blank'
+    const {
+		fallback = FALLBACK_URL,
+		allowRelative = false,
+		baseOrigin = '',
+		allowedDomains = null
+	  } = options || {};
 
-	<?php } ?>
+    if (typeof url !== 'string' || url.trim() === '') {
+        return fallback;
+    }
 
+    // Validate and normalize the allowlist up front (fail closed if malformed).
+    // Entries are normalized by the same parser as the URL (case, trailing spaces, IDN -> punycode).
+    let allowedHosts = null;
 
+    if (allowedDomains !== null) {
+        if (!Array.isArray(allowedDomains)) {
+            return fallback;
+        }
+
+        allowedHosts = [];
+
+        for (const domain of allowedDomains) {
+            if (typeof domain !== 'string' || domain.trim() === '') {
+                return fallback;
+            }
+
+            try {
+                allowedHosts.push(new URL('https://' + domain.trim()).hostname);
+            } catch (e) {
+                return fallback;
+            }
+        }
+    }
+
+    // Resolve the base used for relative URLs.
+    let currentOrigin = 'http://localhost';
+    let currentHref = 'http://localhost/';
+
+    if (typeof window !== 'undefined') {
+        currentOrigin = window.location.origin;
+        currentHref = window.location.href;
+    } else if (baseOrigin) {
+        try {
+            const normalizedBase = new URL(baseOrigin);
+            currentOrigin = normalizedBase.origin;
+            currentHref = normalizedBase.href;
+        } catch (e) {
+            return fallback;
+        }
+    }
+
+    // Parse with the native WHATWG URL parser (the same parser the browser uses to load the URL).
+    let parsed;
+    let isRelative = false;
+
+    try {
+        parsed = new URL(url);
+    } catch (e) {
+        if (!allowRelative) {
+            return fallback;
+        }
+
+        // On the server, never resolve relative URLs against the localhost placeholder.
+        if (typeof window === 'undefined' && !baseOrigin) {
+            return fallback;
+        }
+
+        try {
+            parsed = new URL(url, currentHref);
+            isRelative = true;
+        } catch (e2) {
+            return fallback;
+        }
+    }
+
+    // Only http and https.
+    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+        return fallback;
+    }
+
+    // Hostnames are not percent-encoded by the parser, so allow only real hostname characters
+    // (IDNs are already punycode here) or a bracketed IPv6 address. Blocks quotes, "=", "&", etc.
+    if (!/^(?:[a-z0-9_-]+\.)*[a-z0-9_-]+\.?$|^\[[0-9a-f:.]+\]$/.test(parsed.hostname)) {
+        return fallback;
+    }
+
+    // Relative URLs must stay on the current origin (blocks //evil.com, /\evil.com).
+    if (isRelative && parsed.origin !== currentOrigin) {
+        return fallback;
+    }
+
+    // No credentials (blocks https://google.com@evil.com).
+    if (parsed.username || parsed.password) {
+        return fallback;
+    }
+
+    // Exact hostname allowlist.
+    if (allowedHosts !== null && !allowedHosts.includes(parsed.hostname)) {
+        return fallback;
+    }
+
+    // The parser encodes " < > and spaces but not ' in the path, so encode quotes for any attribute quoting style.
+    return parsed.href.replace(/'/g, '%27').replace(/"/g, '%22');
+}
+
+/**
+ * Strip HTML tags.
+ * 
+ * @param {string} text - Text to strip the HTML tags from.
+ * @return {string} Stripped text.
+ */
+function aui_stripTags(text) {
+	if ('string' !== typeof text) {
+		return '';
+	}
+
+	const domParser = new DOMParser();
+	const htmlDocument = domParser.parseFromString(text, 'text/html');
+
+	// Self-assignment forces browser encoding/sanitization
+	htmlDocument.body.innerText = htmlDocument.body.innerText;
+
+	return htmlDocument.body.innerHTML;
+}
+
+/**
+ * Strip HTML tags and convert HTML entities.
+ * 
+ * @param {string} text - Text to strip tags and convert HTML entities.
+ * @return {string} Sanitized text.
+ */
+function aui_stripTagsEscHTML(text) {
+	let _text = aui_stripTags(text);
+	const textarea = document.createElement('textarea');
+
+	try {
+		textarea.textContent = _text;
+		_text = aui_stripTags(textarea.value);
+	} catch (er) {}
+
+	return _text;
+}
 </script>

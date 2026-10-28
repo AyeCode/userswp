@@ -272,7 +272,7 @@ class AUI_Component_Helper {
 
 		if ( is_array( $value ) ) {
 			foreach ( $value as $index => $item ) {
-				$value[ $index ] = self::_sanitize_html_field( $value, $input );
+				$value[ $index ] = self::_sanitize_html_field( $item, $input );
 			}
 		} elseif ( is_object( $value ) ) {
 			$object_vars = get_object_vars( $value );
@@ -319,6 +319,10 @@ class AUI_Component_Helper {
 	public static function _sanitize_html_field( $value, $input = array() ) {
 		if ( $value === '' ) {
 			return $value;
+		}
+
+		if ( $value === null || ! is_scalar( $value ) ) {
+			return '';
 		}
 
 		$allowed_html = self::kses_allowed_html( 'post', $input );

@@ -49,7 +49,7 @@ class AUI_Component_Pagination {
 			// Set up paginated links.
 			$links = !empty(  $args['links'] ) ? $args['links'] :  paginate_links( $args );
 
-			$class = !empty($args['class']) ? $args['class'] : '';
+			$class = !empty($args['class']) ? AUI_Component_Helper::esc_classes( $args['class'] ) : '';
 
 			$custom_prev_link = '';
 			$custom_next_link = '';

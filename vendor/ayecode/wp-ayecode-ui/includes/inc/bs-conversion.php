@@ -16,7 +16,7 @@
 function aui_bs_convert_sd_output( $output, $instance = '', $args = '', $sd = '' ) {
 	global $aui_bs5;
 
-	if ( $aui_bs5 ) {
+	if ( $aui_bs5 && ! empty( $output ) ) {
 		$convert = array(
 			'"ml-' => '"ms-',
 			'"mr-' => '"me-',
