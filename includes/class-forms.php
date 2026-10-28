@@ -1387,7 +1387,10 @@ class UsersWP_Forms {
 				} elseif ( 'email' === $provider ) {
 					$has_token = \WP2FA\Authenticator\Authentication::user_has_token( $user->ID );
 					if ( empty( $has_token ) || ! $has_token ) {
+						// WP 2FA stops AJAX requests without its setup wizard nonce with a 400 error, so send the code as a normal request.
+						add_filter( 'wp_doing_ajax', '__return_false', PHP_INT_MAX );
 						\WP2FA\Admin\Setup_Wizard::send_authentication_setup_email( $user->ID );
+						remove_filter( 'wp_doing_ajax', '__return_false', PHP_INT_MAX );
 					}
 					?>
 					<p><?php esc_html_e( 'Please enter the 2FA verification code sent to your email address to login:', 'userswp' ); ?></p>
@@ -1798,9 +1801,16 @@ class UsersWP_Forms {
 			wp_send_json_error( array( 'message' => $message ) );
 		}
 
-		// If this is an email login, or if the user failed validation previously, lets send the code to the user.
-		if ( 'email' === $provider && true !== \WP2FA\Authenticator\Login::pre_process_email_authentication( $user ) ) {
+		// Resend the email code when asked.
+		if ( 'email' === $provider ) {
+			// WP 2FA stops AJAX requests without its setup wizard nonce with a 400 error, so send the code as a normal request.
+			add_filter( 'wp_doing_ajax', '__return_false', PHP_INT_MAX );
 
+			try {
+				\WP2FA\Authenticator\Login::pre_process_email_authentication( $user );
+			} finally {
+				remove_filter( 'wp_doing_ajax', '__return_false', PHP_INT_MAX );
+			}
 		}
 
 		// Validate TOTP.
