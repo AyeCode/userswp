@@ -472,7 +472,7 @@ class UsersWP_Admin_Setup_Wizard {
             <tbody>
             <tr>
                 <td>
-                    <p><?php echo wp_sprintf( __( 'Dummy Users for Testing. Password for all dummy users: <strong>%s</strong>', 'userswp' ), $get_dummy_user_passowrd ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+                    <p><?php echo wp_sprintf( __( 'Dummy Users for Testing. Password for all dummy users: <strong>%s</strong>', 'userswp' ), esc_html( $get_dummy_user_passowrd ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
                 </td>
                 <td style="width: 20%">
                     <input style="display: <?php echo ( $total_dummy_users > 0 ) ? 'block' : 'none'; ?>" type="button"
@@ -507,7 +507,7 @@ class UsersWP_Admin_Setup_Wizard {
 	}
 
 	public function get_dummy_user_passowrd() {
-		return substr( hash( 'SHA256', AUTH_KEY . site_url() ), 0, 15 );
+		return uwp_get_dummy_users_password();
 	}
 
 	public function setup_content_save() {

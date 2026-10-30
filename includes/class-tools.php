@@ -603,7 +603,7 @@ class UsersWP_Tools {
      * @return string
      */
     private static function get_dummy_user_passowrd(){
-        return substr(hash( 'SHA256', AUTH_KEY . site_url() ), 0, 15);
+        return uwp_get_dummy_users_password();
     }
 
 	/**
