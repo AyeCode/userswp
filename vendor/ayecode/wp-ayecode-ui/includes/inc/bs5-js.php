@@ -254,9 +254,15 @@
         if (typeof jQuery.fn.popover === 'function') {
             jQuery('[data-bs-toggle="popover"]').popover();
             jQuery('[data-bs-toggle="popover-html"]').popover({
-                html: true,
-                sanitize: false
-            });
+				html: true,
+				sanitize: false,
+				content: function () {
+					return aui_safe_popover_html(this.getAttribute('data-bs-content'));
+				},
+				title: function () {
+					return aui_safe_popover_html(this.getAttribute('data-bs-title') || this.getAttribute('data-bs-original-title'));
+				}
+			});
         } else {
             console.log('jQuery.fn.popover not found');
         }
@@ -1647,5 +1653,47 @@ function aui_stripTagsEscHTML(text) {
 	} catch (er) {}
 
 	return _text;
+}
+
+function aui_safe_popover_html(html) {
+	if (!html) {
+		return '';
+	}
+
+	var doc = new DOMParser().parseFromString('<!DOCTYPE html><body>' + html, 'text/html');
+
+	var blockedTags = ['script', 'iframe', 'frame', 'frameset', 'object', 'embed', 'applet', 'base', 'meta', 'link', 'style', 'template', 'noscript', 'portal', 'animate', 'animatemotion', 'animatetransform', 'set', 'use', 'foreignobject', 'handler', 'listener'];
+	var urlAttrs = ['href', 'xlink:href', 'src', 'action', 'formaction', 'data', 'poster', 'background', 'cite', 'codebase', 'dynsrc', 'lowsrc', 'ping'];
+
+	Array.prototype.slice.call(doc.body.querySelectorAll('*')).forEach(function (el) {
+		if (blockedTags.indexOf(el.localName.toLowerCase()) !== -1) {
+			el.remove();
+			return;
+		}
+
+		Array.prototype.slice.call(el.attributes).forEach(function (attr) {
+			var name = attr.name.toLowerCase();
+			var value = attr.value.replace(/[\u0000-\u0020\u007F-\u009F]/g, '').toLowerCase();
+			var remove = false;
+
+			if (name.indexOf('on') === 0 || name === 'srcdoc') {
+				remove = true;
+			} else if (/^(javascript|vbscript):/.test(value)) {
+				remove = true;
+			} else if (urlAttrs.indexOf(name) !== -1 && value.indexOf('data:') === 0 && !(el.localName === 'img' && name === 'src' && value.indexOf('data:image/') === 0)) {
+				remove = true;
+			} else if (name === 'style' && /expression\(|javascript:|behavior:|-moz-binding/.test(value)) {
+				remove = true;
+			}
+
+			if (remove) {
+				el.removeAttribute(attr.name);
+			}
+		});
+	});
+
+	// Return the inner HTML string instead of a DocumentFragment 
+	// so the popover can be opened/closed repeatedly without emptying.
+	return doc.body.innerHTML;
 }
 </script>

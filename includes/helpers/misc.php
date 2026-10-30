@@ -2123,3 +2123,104 @@ function uwp_get_file_relative_url( $url, $full_path = false ) {
 
 	return apply_filters( 'uwp_get_file_relative_url', $relative_url, $url, $full_path );
 }
+
+/**
+ * Returns the legacy (insecure) dummy users password.
+ *
+ * @since 1.2.79
+ *
+ * @return string
+ */
+function uwp_get_legacy_dummy_users_password() {
+	return substr( hash( 'SHA256', AUTH_KEY . site_url() ), 0, 15 );
+}
+
+/**
+ * Returns the site specific password for dummy users.
+ *
+ * @since 1.2.79
+ *
+ * @return string
+ */
+function uwp_get_dummy_users_password() {
+	$password = get_option( 'uwp_dummy_users_password' );
+
+	if ( empty( $password ) || ! is_string( $password ) ) {
+		$password = wp_generate_password( 20, false, false );
+		update_option( 'uwp_dummy_users_password', $password, false );
+	}
+
+	return $password;
+}
+
+/**
+ * Resets dummy users that still use the legacy password and logs them out.
+ *
+ * @since 1.2.79
+ *
+ * @return void
+ */
+function uwp_maybe_reset_legacy_dummy_users_password() {
+	if ( get_option( 'uwp_dummy_users_password_reset' ) ) {
+		return;
+	}
+
+	// Set the flag first so concurrent requests don't repeat the work.
+	update_option( 'uwp_dummy_users_password_reset', 1 );
+
+	$dummy_users = get_users(
+		array(
+			'meta_key'   => 'uwp_dummy_user',
+			'meta_value' => '1',
+			'fields'     => 'all',
+		)
+	);
+
+	if ( empty( $dummy_users ) ) {
+		return;
+	}
+
+	$legacy_password = uwp_get_legacy_dummy_users_password();
+	$new_password    = uwp_get_dummy_users_password();
+
+	foreach ( $dummy_users as $user ) {
+		if ( ! wp_check_password( $legacy_password, $user->user_pass, $user->ID ) ) {
+			continue;
+		}
+
+		wp_set_password( $new_password, $user->ID );
+
+		// End any sessions that may have been opened with the legacy password.
+		if ( class_exists( 'WP_Session_Tokens' ) ) {
+			WP_Session_Tokens::get_instance( $user->ID )->destroy_all();
+		}
+	}
+}
+add_action( 'init', 'uwp_maybe_reset_legacy_dummy_users_password', 20 );
+
+/**
+ * Blocks login to dummy users with the legacy password.
+ *
+ * @since 1.2.79
+ *
+ * @param WP_User|WP_Error $user     User object or error.
+ * @param string           $password Password given at login.
+ *
+ * @return WP_User|WP_Error
+ */
+function uwp_block_legacy_dummy_users_password( $user, $password ) {
+	if ( ! $user instanceof WP_User || ! is_string( $password ) || '' === $password ) {
+		return $user;
+	}
+
+	if ( ! get_user_meta( $user->ID, 'uwp_dummy_user', true ) ) {
+		return $user;
+	}
+
+	if ( hash_equals( uwp_get_legacy_dummy_users_password(), $password ) ) {
+		return new WP_Error( 'incorrect_password', __( '<strong>Error:</strong> The password you entered is incorrect.', 'userswp' ) );
+	}
+
+	return $user;
+}
+add_filter( 'wp_authenticate_user', 'uwp_block_legacy_dummy_users_password', 10, 2 );
