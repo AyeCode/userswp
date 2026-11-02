@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.58';
+		public $version = '0.2.59';
 
 		/**
 		 * Class textdomain.
@@ -573,17 +573,21 @@ $custom_css .= "
 		 * If this remains small then its best to use this than to add another JS file.
 		 */
 		public function inline_script() {
-            global $aui_bs5;
+			global $aui_bs5;
+
 			// Flatpickr calendar locale
 			$flatpickr_locale = self::flatpickr_locale();
+
+			// Popover HTML sanitizer settings.
+			$popover_sanitize  = self::popover_html_sanitize();
+			$popover_allowlist = self::popover_html_allowlist( $aui_bs5 );
 
 			ob_start();
 			if ( $aui_bs5 ) {
 				include_once( dirname( __FILE__ ) . '/inc/bs5-js.php' );
-			}else{
+			} else {
 				include_once( dirname( __FILE__ ) . '/inc/bs4-js.php' );
-            }
-
+			}
 			$output = ob_get_clean();
 
 			/*
@@ -592,7 +596,117 @@ $custom_css .= "
 			return str_replace( array(
 				'<script>',
 				'</script>'
-			), '', self::minify_js($output) );
+			), '', self::minify_js( $output ) );
+		}
+
+		/**
+		 * Whether `popover-html` content should be sanitized.
+		 *
+		 * @since 0.2.59
+		 *
+		 * @return bool
+		 */
+		public static function popover_html_sanitize() {
+			/**
+			 * Filter whether `popover-html` content is sanitized with the Bootstrap sanitizer.
+			 *
+			 * @since 0.2.59
+			 *
+			 * @param bool $sanitize True to sanitize. Default true.
+			 */
+			return (bool) apply_filters( 'ayecode_ui_popover_html_sanitize', true );
+		}
+
+		/**
+		 * Extra tags and attributes allowed in `popover-html` content.
+		 *
+		 * These are merged with the Bootstrap default allowList (BS5) / whiteList (BS4) in JS,
+		 * so the Bootstrap defaults (a, b, br, div, em, i, img, p, span, strong, ul...) are always kept.
+		 * An attribute ending with `*` is a prefix match, e.g. `data-my-plugin-*`.
+		 *
+		 * @since 0.2.59
+		 *
+		 * @param bool $bs5 True for Bootstrap 5, false for Bootstrap 4. Default true.
+		 * @return array Tag => list of attributes. Use '*' for attributes allowed on all tags.
+		 */
+		public static function popover_html_allowlist( $bs5 = true ) {
+			$allowlist = array(
+				// style: rating stars width, popover min-width. title: rating & unit labels.
+				'*'          => array( 'style', 'title' ),
+				// Used by AUI input wrappers and the GD Advanced Search distance popover.
+				// BS4: data-container + data-toggle="buttons" (km/mi button group).
+				'div'        => $bs5 ? array( 'data-argument', 'data-bs-container' ) : array( 'data-argument', 'data-container', 'data-toggle' ),
+				'input'      => array( 'type', 'name', 'value', 'checked', 'disabled', 'readonly', 'autocomplete', 'placeholder', 'min', 'max', 'step' ),
+				'label'      => array( 'for' ),
+				'table'      => array(),
+				'caption'    => array(),
+				'thead'      => array(),
+				'tbody'      => array(),
+				'tfoot'      => array(),
+				'tr'         => array(),
+				'th'         => array( 'colspan', 'rowspan', 'scope' ),
+				'td'         => array( 'colspan', 'rowspan' ),
+				'blockquote' => array(),
+				'dl'         => array(),
+				'dt'         => array(),
+				'dd'         => array(),
+				'abbr'       => array(),
+				'mark'       => array(),
+				'del'        => array(),
+				'ins'        => array(),
+			);
+
+			/**
+			 * Filter the extra tags and attributes allowed in `popover-html` content.
+			 *
+			 * Example: $allowlist['button'] = array( 'type', 'data-my-plugin-*' );
+			 *
+			 * @since 0.2.59
+			 *
+			 * @param array $allowlist Tag => list of attributes.
+			 * @param bool  $bs5       True for Bootstrap 5, false for Bootstrap 4.
+			 */
+			$allowlist = apply_filters( 'ayecode_ui_popover_html_allowlist', $allowlist, $bs5 );
+
+			// Tags and attributes that are never allowed, even if added by a filter.
+			$blocked_tags  = array( 'script', 'style', 'iframe', 'frame', 'frameset', 'object', 'embed', 'applet', 'base', 'link', 'meta', 'form', 'template', 'svg', 'math' );
+			$blocked_attrs = array( 'formaction', 'srcdoc', 'action' );
+
+			$clean = array();
+
+			foreach ( (array) $allowlist as $tag => $attributes ) {
+				$tag = strtolower( trim( (string) $tag ) );
+
+				if ( ! ( $tag === '*' || preg_match( '/^[a-z][a-z0-9-]*$/', $tag ) ) || in_array( $tag, $blocked_tags, true ) ) {
+					continue;
+				}
+
+				$clean[ $tag ] = array();
+
+				foreach ( (array) $attributes as $attribute ) {
+					if ( ! is_string( $attribute ) ) {
+						continue;
+					}
+
+					$attribute = strtolower( trim( $attribute ) );
+
+					// Plain attribute name, or a data-* prefix ending with a wildcard.
+					if ( ! ( preg_match( '/^[a-z][a-z0-9_:-]*$/', $attribute ) || preg_match( '/^data-[a-z0-9_-]*\*$/', $attribute ) ) ) {
+						continue;
+					}
+
+					// Never allow event handlers.
+					if ( strpos( $attribute, 'on' ) === 0 || in_array( $attribute, $blocked_attrs, true ) ) {
+						continue;
+					}
+
+					if ( ! in_array( $attribute, $clean[ $tag ], true ) ) {
+						$clean[ $tag ][] = $attribute;
+					}
+				}
+			}
+
+			return $clean;
 		}
 
 

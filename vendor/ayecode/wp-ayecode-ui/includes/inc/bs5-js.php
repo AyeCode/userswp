@@ -241,6 +241,61 @@
 
     }
 
+    var aui_popover_allowlist_cache = null;
+
+    /**
+     * Get the allowList used to sanitize `popover-html` content.
+     * Bootstrap's default allowList merged with the extra tags/attributes.
+     */
+    function aui_popover_allowlist() {
+        if (aui_popover_allowlist_cache) {
+            return aui_popover_allowlist_cache;
+        }
+
+        var extra = <?php echo wp_json_encode( (object) ( isset( $popover_allowlist ) ? $popover_allowlist : array() ) ); ?>,
+            Popover = typeof jQuery.fn.popover === 'function' && jQuery.fn.popover.Constructor ? jQuery.fn.popover.Constructor : ( window.bootstrap && window.bootstrap.Popover ? window.bootstrap.Popover : null ),
+            defaults = Popover && Popover.Default && Popover.Default.allowList ? Popover.Default.allowList : null,
+            allowList = {},
+            tag, i, attr;
+
+        // Use default list.
+        if (!defaults) {
+            return null;
+        }
+
+        // Extend with the defaults.
+        for (tag in defaults) {
+            if (Object.prototype.hasOwnProperty.call(defaults, tag)) {
+                allowList[tag] = defaults[tag].slice(0);
+            }
+        }
+
+        for (tag in extra) {
+            if (!Object.prototype.hasOwnProperty.call(extra, tag) || !Array.isArray(extra[tag])) {
+                continue;
+            }
+
+            if (!allowList[tag]) {
+                allowList[tag] = [];
+            }
+
+            for (i = 0; i < extra[tag].length; i++) {
+                attr = extra[tag][i];
+
+                // data-* prefix with a wildcard, e.g. data-my-plugin-*
+                if (attr.charAt(attr.length - 1) === '*') {
+                    allowList[tag].push(new RegExp('^' + attr.slice(0, -1) + '[\\w-]*$', 'i'));
+                } else if (allowList[tag].indexOf(attr) === -1) {
+                    allowList[tag].push(attr);
+                }
+            }
+        }
+
+        aui_popover_allowlist_cache = allowList;
+
+        return allowList;
+    }
+
     /**
      * Initiate tooltips on the page.
      */
@@ -253,16 +308,17 @@
 
         if (typeof jQuery.fn.popover === 'function') {
             jQuery('[data-bs-toggle="popover"]').popover();
-            jQuery('[data-bs-toggle="popover-html"]').popover({
-				html: true,
-				sanitize: false,
-				content: function () {
-					return aui_safe_popover_html(this.getAttribute('data-bs-content'));
-				},
-				title: function () {
-					return aui_safe_popover_html(this.getAttribute('data-bs-title') || this.getAttribute('data-bs-original-title'));
-				}
-			});
+
+            var popoverArgs = {
+                html: true,
+                sanitize: <?php echo ( ! isset( $popover_sanitize ) || ! empty( $popover_sanitize ) ) ? 'true' : 'false'; ?>
+            };
+
+            if (popoverArgs.sanitize && aui_popover_allowlist()) {
+                popoverArgs.allowList = aui_popover_allowlist();
+            }
+
+            jQuery('[data-bs-toggle="popover-html"]').popover(popoverArgs);
         } else {
             console.log('jQuery.fn.popover not found');
         }
@@ -1653,47 +1709,5 @@ function aui_stripTagsEscHTML(text) {
 	} catch (er) {}
 
 	return _text;
-}
-
-function aui_safe_popover_html(html) {
-	if (!html) {
-		return '';
-	}
-
-	var doc = new DOMParser().parseFromString('<!DOCTYPE html><body>' + html, 'text/html');
-
-	var blockedTags = ['script', 'iframe', 'frame', 'frameset', 'object', 'embed', 'applet', 'base', 'meta', 'link', 'style', 'template', 'noscript', 'portal', 'animate', 'animatemotion', 'animatetransform', 'set', 'use', 'foreignobject', 'handler', 'listener'];
-	var urlAttrs = ['href', 'xlink:href', 'src', 'action', 'formaction', 'data', 'poster', 'background', 'cite', 'codebase', 'dynsrc', 'lowsrc', 'ping'];
-
-	Array.prototype.slice.call(doc.body.querySelectorAll('*')).forEach(function (el) {
-		if (blockedTags.indexOf(el.localName.toLowerCase()) !== -1) {
-			el.remove();
-			return;
-		}
-
-		Array.prototype.slice.call(el.attributes).forEach(function (attr) {
-			var name = attr.name.toLowerCase();
-			var value = attr.value.replace(/[\u0000-\u0020\u007F-\u009F]/g, '').toLowerCase();
-			var remove = false;
-
-			if (name.indexOf('on') === 0 || name === 'srcdoc') {
-				remove = true;
-			} else if (/^(javascript|vbscript):/.test(value)) {
-				remove = true;
-			} else if (urlAttrs.indexOf(name) !== -1 && value.indexOf('data:') === 0 && !(el.localName === 'img' && name === 'src' && value.indexOf('data:image/') === 0)) {
-				remove = true;
-			} else if (name === 'style' && /expression\(|javascript:|behavior:|-moz-binding/.test(value)) {
-				remove = true;
-			}
-
-			if (remove) {
-				el.removeAttribute(attr.name);
-			}
-		});
-	});
-
-	// Return the inner HTML string instead of a DocumentFragment 
-	// so the popover can be opened/closed repeatedly without emptying.
-	return doc.body.innerHTML;
 }
 </script>

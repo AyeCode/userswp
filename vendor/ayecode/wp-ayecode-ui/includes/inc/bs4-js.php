@@ -224,6 +224,61 @@
 
     }
 
+    var aui_popover_allowlist_cache = null;
+
+    /**
+     * Get the whiteList used to sanitize `popover-html` content.
+     * Bootstrap's default whiteList merged with the extra tags/attributes.
+     */
+    function aui_popover_allowlist() {
+        if (aui_popover_allowlist_cache) {
+            return aui_popover_allowlist_cache;
+        }
+
+        var extra = <?php echo wp_json_encode( (object) ( isset( $popover_allowlist ) ? $popover_allowlist : array() ) ); ?>,
+            Popover = typeof jQuery.fn.popover === 'function' && jQuery.fn.popover.Constructor ? jQuery.fn.popover.Constructor : ( window.bootstrap && window.bootstrap.Popover ? window.bootstrap.Popover : null ),
+            defaults = Popover && Popover.Default && Popover.Default.whiteList ? Popover.Default.whiteList : null,
+            allowList = {},
+            tag, i, attr;
+
+        // Use default list.
+        if (!defaults) {
+            return null;
+        }
+
+        // Extend with the defaults.
+        for (tag in defaults) {
+            if (Object.prototype.hasOwnProperty.call(defaults, tag)) {
+                allowList[tag] = defaults[tag].slice(0);
+            }
+        }
+
+        for (tag in extra) {
+            if (!Object.prototype.hasOwnProperty.call(extra, tag) || !Array.isArray(extra[tag])) {
+                continue;
+            }
+
+            if (!allowList[tag]) {
+                allowList[tag] = [];
+            }
+
+            for (i = 0; i < extra[tag].length; i++) {
+                attr = extra[tag][i];
+
+                // data-* prefix with a wildcard, e.g. data-my-plugin-*
+                if (attr.charAt(attr.length - 1) === '*') {
+                    allowList[tag].push(new RegExp('^' + attr.slice(0, -1) + '[\\w-]*$', 'i'));
+                } else if (allowList[tag].indexOf(attr) === -1) {
+                    allowList[tag].push(attr);
+                }
+            }
+        }
+
+        aui_popover_allowlist_cache = allowList;
+
+        return allowList;
+    }
+
     /**
      * Initiate tooltips on the page.
      */
@@ -236,9 +291,17 @@
 
         if (typeof jQuery.fn.popover === 'function') {
             jQuery('[data-toggle="popover"]').popover();
-            jQuery('[data-toggle="popover-html"]').popover({
-                html: true
-            });
+
+            var popoverArgs = {
+                html: true,
+                sanitize: <?php echo ( ! isset( $popover_sanitize ) || ! empty( $popover_sanitize ) ) ? 'true' : 'false'; ?>
+            };
+
+            if (popoverArgs.sanitize && aui_popover_allowlist()) {
+                popoverArgs.whiteList = aui_popover_allowlist();
+            }
+
+            jQuery('[data-toggle="popover-html"]').popover(popoverArgs);
         } else {
             console.log('jQuery.fn.popover not found');
         }

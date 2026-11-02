@@ -161,6 +161,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.80 - TBD =
+* Update AUI 0.2.59 - CHANGED
+
 = 1.2.79 - 2026-10-30 =
 * Dummy test users could be logged into using a public hash - FIXED/SECURITY
 
