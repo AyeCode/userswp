@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: UsersWP 1.2.78\n"
+"Project-Id-Version: UsersWP 1.2.80\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-28 19:42+0530\n"
-"PO-Revision-Date: 2026-10-28 19:42+0530\n"
+"POT-Creation-Date: 2026-11-02 19:05+0530\n"
+"PO-Revision-Date: 2026-11-02 19:06+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -4228,6 +4228,10 @@ msgstr ""
 msgid ""
 "%s requires a newer version of UsersWP and will not run until the UsersWP "
 "plugin is updated."
+msgstr ""
+
+#: includes/helpers/misc.php:2221
+msgid "<strong>Error:</strong> The password you entered is incorrect."
 msgstr ""
 
 #: includes/helpers/pages.php:556
