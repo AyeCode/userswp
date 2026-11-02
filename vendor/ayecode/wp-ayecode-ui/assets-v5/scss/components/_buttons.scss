@@ -93,6 +93,59 @@
   }
 }
 
+
+// Toggle buttons (.btn-check + .btn)
+//
+// The rule above makes outline button text white on hover, because outline
+// buttons fill on hover. An unchecked toggle button does not fill on hover
+// (Bootstrap ".btn-check + .btn:hover"), so the text was white on white.
+// Keep the outline text colour for unchecked toggle buttons.
+
+.btn-check:not(:checked) + [class^='btn-outline-'],
+.btn-check:not(:checked) + [class*=' btn-outline-'] {
+  &:hover {
+    color: var(--#{$prefix}btn-color) !important;
+  }
+}
+
+// Wrapped builds only (.bsui compatibility & .editor-styles-wrapper FSE).
+// Bootstrap writes these rules as ".btn-check + &", which compiles to
+// ".btn-check + .bsui .btn" and never matches, so add them with the right scope.
+@if & {
+  .btn-check + .btn:hover {
+    color: var(--#{$prefix}btn-color);
+    background-color: var(--#{$prefix}btn-bg);
+    border-color: var(--#{$prefix}btn-border-color);
+  }
+
+  .btn-check:focus-visible + .btn {
+    border-color: var(--#{$prefix}btn-hover-border-color);
+    outline: 0;
+    @if $enable-shadows {
+      box-shadow: var(--#{$prefix}btn-box-shadow), var(--#{$prefix}btn-focus-box-shadow);
+    } @else {
+      box-shadow: var(--#{$prefix}btn-focus-box-shadow);
+    }
+  }
+
+  .btn-check:checked + .btn,
+  :not(.btn-check) + .btn:active {
+    color: var(--#{$prefix}btn-active-color);
+    background-color: var(--#{$prefix}btn-active-bg);
+    background-image: if($enable-gradients, none, null);
+    border-color: var(--#{$prefix}btn-active-border-color);
+    @include box-shadow(var(--#{$prefix}btn-active-shadow));
+
+    &:focus-visible {
+      @if $enable-shadows {
+        box-shadow: var(--#{$prefix}btn-active-shadow), var(--#{$prefix}btn-focus-box-shadow);
+      } @else {
+        box-shadow: var(--#{$prefix}btn-focus-box-shadow);
+      }
+    }
+  }
+}
+
 .btn-outline-secondary {
   border-color: $gray-400;
   color: $gray-800;
