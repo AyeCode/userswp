@@ -270,7 +270,7 @@ function uwp_get_user_badge($args){
 	}
 
 	// If not then we run the standard output.
-	if ( empty( $output ) ) {
+	if ( empty( $output ) && ! empty( $field ) ) {
 		$search = $args['search'];
 		$match_found = $match_field === '' ? true : false;
 		$is_date = ( isset( $field->field_type ) && $field->field_type == 'datepicker' ) ? true : false;
@@ -454,6 +454,20 @@ function uwp_get_user_badge($args){
 
 			$badge = apply_filters( 'uwp_user_badge_output_badge', $badge, $match_value, $match_field, $args, $user, $field );
 
+			$badge = ! empty( $badge ) ? wp_kses_post( $badge ) : '';
+
+			// Popover and hover content are also rendered as HTML.
+			foreach ( array( 'popover_title', 'popover_text', 'hover_content' ) as $html_arg ) {
+				if ( ! empty( $args[ $html_arg ] ) ) {
+					$args[ $html_arg ] = wp_kses_post( $args[ $html_arg ] );
+				}
+			}
+
+			// Block unsafe link protocols such as javascript:.
+			if ( ! empty( $args['link'] ) && $args['link'] !== '#' && $args['link'] !== 'javascript:void(0)' && $args['link'] !== 'javascript:void(0);' ) {
+				$args['link'] = esc_url( $args['link'] );
+			}
+
 			$btn_class = 'border-0 align-middle uwp-badge';
 			// color
 			$color_custom = true;
@@ -518,7 +532,7 @@ function uwp_get_user_badge($args){
 				$btn_args['hover_content'] = $args['hover_content'];
 			}
 			if(!empty($args['hover_icon'])){
-				$btn_args['hover_icon'] = $args['hover_icon'];
+				$btn_args['hover_icon'] = sanitize_text_field( $args['hover_icon'] );
 			}
 
 			// style

@@ -288,6 +288,9 @@ class UWP_User_Badge_Widget extends WP_Super_Duper {
 			return '';
 		}
 
+		// These are not widget options and allow raw JavaScript/attributes, so never accept them from shortcode or block input.
+		unset( $args['onclick'], $args['extra_attributes'] );
+
 		$errors = array();
 		if ( empty( $args['user_id'] ) ) {
 			$errors[] = __('User ID is missing','userswp');
