@@ -1894,7 +1894,7 @@ function uwp_get_activation_link($user_id)
 
 	$activation_link = add_query_arg(
 		$activation_args,
-		home_url('/login/')
+		uwp_get_page_link( 'login' )
 	);
 
 	return apply_filters('uwp_activation_link', $activation_link, $user_id, $user_data, $activation_args);
