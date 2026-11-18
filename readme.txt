@@ -161,6 +161,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.82 - TBD =
+* Replaced hard-coded login URL in activation link code - FIXED
+
 = 1.2.81 - 2026-11-03 =
 * Sanitizing user badge output to prevent stored XSS - FIXED/SECURITY
 
