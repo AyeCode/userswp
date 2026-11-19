@@ -3,7 +3,7 @@
         'name' => 'uswerwp/userswp',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '230781f1c6f343dec6c195663d6b02aae12f371a',
+        'reference' => '51f6e188549d1e97739d4d7856d9b5ca7318512c',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -79,7 +79,7 @@
         'uswerwp/userswp' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '230781f1c6f343dec6c195663d6b02aae12f371a',
+            'reference' => '51f6e188549d1e97739d4d7856d9b5ca7318512c',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

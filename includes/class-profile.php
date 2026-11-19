@@ -1432,9 +1432,18 @@ class UsersWP_Profile {
 	 */
 	public function allow_all_users_profile_uploads( $llcaps, $caps, $args, $user ) {
 
+		if ( ! isset( $caps[0] ) || 'upload_files' !== $caps[0] || ! empty( $llcaps['upload_files'] ) ) {
+			return $llcaps;
+		}
+
+		// Only ever grant to the logged in user acting on their own behalf.
+		if ( empty( $user->ID ) || (int) $user->ID !== get_current_user_id() ) {
+			return $llcaps;
+		}
+
 		$files = new UsersWP_Files();
 
-		if ( isset( $caps[0] ) && $caps[0] == 'upload_files' && $files->doing_upload() ) {
+		if ( $files->is_valid_profile_upload() ) {
 			$llcaps['upload_files'] = true;
 		}
 
@@ -1496,8 +1505,9 @@ class UsersWP_Profile {
 	 */
 	public function add_uwp_plupload_param( $params ) {
 
-		if ( ! is_admin() && get_the_ID() == uwp_get_page_id( 'profile_page', false ) ) {
-			$params['uwp_profile_upload'] = true;
+		if ( ! is_admin() && is_user_logged_in() && get_the_ID() == uwp_get_page_id( 'profile_page', false ) ) {
+			$params['uwp_profile_upload']       = true;
+			$params['uwp_profile_upload_nonce'] = wp_create_nonce( 'uwp_profile_upload' );
 		}
 
 		return $params;
