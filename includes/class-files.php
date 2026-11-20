@@ -437,6 +437,24 @@ class UsersWP_Files {
     }
 
     /**
+     * Check whether the request is a genuine profile page upload by a logged in user.
+     *
+     * Unlike doing_upload() this verifies the nonce, so it must only be called once
+     * pluggable functions are available (not from the plugin constructor).
+     *
+     * @since       1.2.82
+     * @package     userswp
+     * @return      bool
+     */
+    public function is_valid_profile_upload() {
+        if ( ! $this->doing_upload() || ! is_user_logged_in() || empty( $_POST['uwp_profile_upload_nonce'] ) ) {
+            return false;
+        }
+
+        return (bool) wp_verify_nonce( sanitize_key( wp_unslash( $_POST['uwp_profile_upload_nonce'] ) ), 'uwp_profile_upload' );
+    }
+
+    /**
      * Gets the maximum file upload size.
      *
      * @since       1.0.0
