@@ -161,6 +161,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.83 - TBD =
+* Unconfirmed accounts could log in via XML-RPC - FIXED/SECURITY
+* Escaped user meta shortcode css_class - FIXED/SECURITY
+
 = 1.2.82 - 2026-11-19 =
 * Replaced hard-coded login URL in activation link code - FIXED
 * Logged out users could upload images to the media library through the profile upload permission - FIXED/SECURITY
