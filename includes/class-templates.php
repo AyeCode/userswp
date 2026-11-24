@@ -1261,6 +1261,71 @@ class UsersWP_Templates {
 	}
 
 	/**
+	 * Whether the user has not confirmed their email yet.
+	 *
+	 * @param WP_User|int $user User object or ID.
+	 *
+	 * @return bool
+	 */
+	public function is_unconfirmed_user( $user ) {
+		$user_id = $user instanceof WP_User ? $user->ID : absint( $user );
+
+		if ( ! $user_id || 'email_unconfirmed' !== get_user_meta( $user_id, 'uwp_mod', true ) ) {
+			return false;
+		}
+
+		$user = $user instanceof WP_User ? $user : get_userdata( $user_id );
+
+		return $user && ! in_array( 'administrator', (array) $user->roles, true );
+	}
+
+	/**
+	 * Refuses authentication for unconfirmed accounts.
+	 *
+	 * @param WP_User|WP_Error|null $user User or error.
+	 *
+	 * @return WP_User|WP_Error|null
+	 */
+	public function block_unconfirmed_authenticate( $user ) {
+		if ( ! $user instanceof WP_User || ! $this->is_unconfirmed_user( $user ) ) {
+			return $user;
+		}
+
+		$message = __( 'Your account is not activated yet. Please check your email for activation email.', 'userswp' );
+
+		$login_page_url = uwp_get_login_page_url();
+		if ( $login_page_url ) {
+			$resend_link = add_query_arg(
+				array(
+					'user_id' => $user->ID,
+					'action'  => 'uwp_resend',
+					'_nonce'  => wp_create_nonce( 'uwp_resend' ),
+				),
+				$login_page_url
+			);
+
+			$message .= ' <a href="' . esc_url( $resend_link ) . '">' . esc_html__( 'Resend', 'userswp' ) . '</a>';
+		}
+
+		return new WP_Error( 'uwp_act_pending', $message );
+	}
+
+	/**
+	 * Drops the current user when unconfirmed (application passwords, old sessions).
+	 *
+	 * @param int|false $user_id User ID.
+	 *
+	 * @return int|false
+	 */
+	public function block_unconfirmed_current_user( $user_id ) {
+		if ( $user_id && $this->is_unconfirmed_user( $user_id ) ) {
+			return false;
+		}
+
+		return $user_id;
+	}
+
+	/**
 	 * Redirects the user to login page when email not confirmed.
 	 *
 	 * @since   1.0.0
