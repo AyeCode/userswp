@@ -2224,3 +2224,49 @@ function uwp_block_legacy_dummy_users_password( $user, $password ) {
 	return $user;
 }
 add_filter( 'wp_authenticate_user', 'uwp_block_legacy_dummy_users_password', 10, 2 );
+
+/**
+ * Sanitize user submitted HTML from an editor type field.
+ *
+ * Runs wp_kses_post() and then removes class names that UsersWP JavaScript uses
+ * as behaviour hooks (e.g. "uwp_more") so that users can't attach plugin
+ * scripts to their own content.
+ *
+ * @since 1.2.84
+ *
+ * @param string $value Raw or stored value.
+ *
+ * @return string Sanitized HTML.
+ */
+function uwp_sanitize_editor_value( $value ) {
+	if ( ! is_scalar( $value ) || $value === '' ) {
+		return '';
+	}
+
+	$value = wp_kses_post( (string) $value );
+
+	$reserved = apply_filters( 'uwp_editor_reserved_classes', array( 'uwp_more', 'uwp_more_link', 'uwp_more_content', 'uwp_more_ellipses' ) );
+
+	if ( ! empty( $reserved ) && stripos( $value, 'class' ) !== false ) {
+		$reserved = array_map( 'strtolower', (array) $reserved );
+
+		// wp_kses() normalizes attributes to name="value" form.
+		$value = preg_replace_callback(
+			'/(\sclass\s*=\s*")([^"]*)(")/i',
+			function ( $matches ) use ( $reserved ) {
+				$classes = preg_split( '/\s+/', trim( $matches[2] ) );
+				$classes = array_filter(
+					$classes,
+					function ( $class ) use ( $reserved ) {
+						return $class !== '' && ! in_array( strtolower( $class ), $reserved, true );
+					}
+				);
+
+				return $matches[1] . implode( ' ', $classes ) . $matches[3];
+			},
+			$value
+		);
+	}
+
+	return $value;
+}

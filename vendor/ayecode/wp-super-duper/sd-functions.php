@@ -3405,6 +3405,9 @@ function sd_render_block( $block_content, $block, $instance = '' ) {
 					if ( isset( $output_condition['message'] ) ) {
 						$content = $output_condition['message'] != '' ? __( stripslashes( $output_condition['message'] ), 'ayecode-connect' ) : $output_condition['message'];
 
+						// Sanitize the message to prevent XSS.
+						$content = is_scalar( $content ) ? wp_kses_post( (string) $content ) : '';
+
 						if ( ! empty( $output_condition['message_type'] ) ) {
 							$content = aui()->alert( array(
 									'type'=> $output_condition['message_type'],

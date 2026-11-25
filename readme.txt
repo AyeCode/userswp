@@ -4,7 +4,7 @@ Donate link: https://www.ko-fi.com/stiofan
 Tags: login form, registration, registration form, user profile, user registration, members, membership
 Requires at least: 6.1
 Tested up to: 7.1
-Stable tag: 1.2.83
+Stable tag: 1.2.84
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -160,6 +160,10 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 6. Edit Account Form.
 
 == Changelog ==
+
+= 1.2.84 - 2026-11-25 =
+* Stored DOM-based XSS via editor type account field on members directory - FIXED/SECURITY
+* Update SD 1.2.39 - CHANGED
 
 = 1.2.83 - 2026-11-24 =
 * Unconfirmed accounts could log in via XML-RPC - FIXED/SECURITY
