@@ -1,3 +1,6 @@
+= 1.2.39 - 2026-11-20 =
+* Escape visibility condition message output to prevent stored XSS - FIXED/SECURITY
+
 = 1.2.38 - 2026-10-20 =
 * SeedProd builder JS error when block/shortcode only classes are registered with register_widget() - FIXED
 
