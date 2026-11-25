@@ -714,6 +714,8 @@ final class UsersWP {
 		add_action( 'template_redirect', array( $instance, 'profile_redirect' ), 10 );
 		add_action( 'template_redirect', array( $instance, 'access_checks' ), 20 );
 		add_action( 'wp', array( $instance, 'redirect_templates_sub_pages' ) );
+		add_filter( 'authenticate', array( $instance, 'block_unconfirmed_authenticate' ), 99, 1 );
+		add_filter( 'determine_current_user', array( $instance, 'block_unconfirmed_current_user' ), 99, 1 );
 		add_action( 'wp_login', array( $instance, 'unconfirmed_login_redirect' ), 10, 2 );
 
 		add_filter( 'wp_setup_nav_menu_item', array( $instance, 'setup_nav_menu_item' ), 10, 1 );

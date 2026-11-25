@@ -207,7 +207,7 @@ class UWP_User_Meta_Widget extends WP_Super_Duper {
         }
 
         //wrap output in a div
-        $output = '<div class="uwp-user-meta-wrap '.$css_class.'">'.$output.'</div>';
+        $output = '<div class="uwp-user-meta-wrap ' . esc_attr( $css_class ) . '">' . $output . '</div>';
 
         return $output;
 
