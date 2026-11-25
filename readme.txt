@@ -161,6 +161,9 @@ Yes, you can customize it with Elementor, but also with Gutenberg, Divi, Beaver 
 
 == Changelog ==
 
+= 1.2.84 - TBD =
+* Stored DOM-based XSS via editor type account field on members directory - FIXED/SECURITY
+
 = 1.2.83 - 2026-11-24 =
 * Unconfirmed accounts could log in via XML-RPC - FIXED/SECURITY
 * Escaped user meta shortcode css_class - FIXED/SECURITY

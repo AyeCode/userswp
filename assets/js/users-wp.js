@@ -20,7 +20,7 @@ jQuery(window).on('load',function () {
 
                 var c = content.substr(0, showChar);
                 var h = content.substr(showChar, content.length - showChar);
-                var html = uwp_nl2br(c) + '<span class="uwp_more_ellipses">' + ellipsestext+ '&nbsp;</span><span class="uwp_more_content"><span style="display: none;">' + uwp_nl2br(h) + '</span>&nbsp;&nbsp;<a href="" class="uwp_more_link">' + moretext + '</a></span>';
+                var html = uwp_nl2br(uwp_esc_html(c)) + '<span class="uwp_more_ellipses">' + ellipsestext+ '&nbsp;</span><span class="uwp_more_content"><span style="display: none;">' + uwp_nl2br(uwp_esc_html(h)) + '</span>&nbsp;&nbsp;<a href="" class="uwp_more_link">' + moretext + '</a></span>';
 
                 $(this).html(html);
             }
@@ -238,6 +238,21 @@ jQuery(window).on('load',function () {
 
     });
 }( jQuery, window ));
+
+/**
+ * Escape a string for safe insertion into HTML.
+ *
+ * @param {string} str String to escape.
+ * @return {string} Escaped string.
+ */
+function uwp_esc_html(str) {
+    return String(str === undefined || str === null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
 
 function uwp_nl2br(str, is_xhtml) {
     var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
